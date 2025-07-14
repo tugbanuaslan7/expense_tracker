@@ -93,3 +93,61 @@ NewExpense widget'ı kullanıcıdan yeni bir expense girişi almak için bir for
 
 ![alt text](images/image-21.png)  
 ![alt text](images/image-22.png)
+
+## Getting User Input on Every Keystroke
+![alt text](images/image-23.png)  
+![alt text](images/image-24.png)
+![alt text](images/image-25.png)
+
+## Letting Flutter do the Work with TextEditingController
+aynı işlevi dshs profösyonel haliyle yapalım  
+![alt text](images/image-26.png)
+
+## Adding a New Input
+Amount alanı ekleyelim   
+![alt text](images/image-27.png)  
+![alt text](images/image-28.png)
+
+## Closing The Modal Manually
+Cancel butonunu aktifleştirelim  
+![alt text](images/image-29.png)
+
+## Showing a Date Picker
+Tarih girişi yapabilmek için alan eklendi   
+![alt text](images/image-30.png)
+![alt text](images/image-31.png)   
+![alt text](images/image-32.png)
+![alt text](images/image-33.png)
+
+## Working with "Futures" for Handling Data from the Future
+Seçilen tarihi nasıl saklayabiliriz?   
+
+![alt text](images/image-34.png)
+![alt text](images/image-35.png)   
+![alt text](images/image-36.png)
+![alt text](images/image-37.png)
+![alt text](images/image-38.png)
+
+
+## Adding a Dropdown Button
+Kategori için açılır menü ekleyelim  
+![alt text](images/image-39.png)     
+![alt text](images/image-40.png)
+![alt text](images/image-41.png)
+
+## Combining Conditions with AND and OR Operators
+“Save Expense” butonuna basıldığında girilen veri geçerli mi değil mi kontrol edelim.   
+![alt text](images/image-42.png)
+
+## Validating User Input & Showing an Error Dialog
+Kullanıcı hatalı bilgi girdiğinde (örneğin boş başlık, negatif tutar veya tarih seçilmemişse), uygulama uyarı penceresi (popup) göstersin.
+
+![alt text](images/image-43.png)  
+![alt text](images/image-44.png)
+
+## Saving New Expenses
+
+![alt text](images/image-45.png)
+![alt text](images/image-46.png)  
+![alt text](images/image-47.png)   
+![alt text](images/image-48.png)  
