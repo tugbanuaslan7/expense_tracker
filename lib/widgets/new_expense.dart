@@ -68,6 +68,7 @@ class _NewExpenseState extends State<NewExpense> {
         category: _selectedCategory,
       ),
     );
+    Navigator.pop(context);
   }
 
   //  Controller’ı temizlemek için dispose()
@@ -80,89 +81,95 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-      return Padding(
-        padding: EdgeInsets.all(16), // Her yönden 16 piksel boşluk bırak
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleContoller,
-              maxLength: 50, // Kullanıcıdan maksimum 50 karakterlik bir başlık (title) girmesi isteniyor.
-              decoration: InputDecoration(
-                label: Text('Title'),
-              ),
-            ),
-            Row(
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
+            child: Column(
               children: [
-                Expanded(
-                  child:TextField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixText: '\$ ',
-                      label: Text('Amount'),
-                    ),
+                TextField(
+                  controller: _titleContoller,
+                  maxLength: 50, // Kullanıcıdan maksimum 50 karakterlik bir başlık (title) girmesi isteniyor.
+                  decoration: InputDecoration(
+                    label: Text('Title'),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(_selectedDate == null ?'No date selected': formatter.format(_selectedDate!),),
-                      IconButton(
-                        onPressed: _presentDatePicker, 
-                        icon: const Icon(
-                          Icons.calendar_month,
+                Row(
+                  children: [
+                    Expanded(
+                      child:TextField(
+                        controller: _amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          prefixText: '\$ ',
+                          label: Text('Amount'),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                DropdownButton(
-                    value: _selectedCategory, // şu an seçili olan değer
-                    // dropdown’da görüntülenecek seçeneklerin listesini tanımlar.
-                    items: Category.values // enum’daki tüm değerleri döndürür
-                        // .map(...): Her bir enum değeri için bir DropdownMenuItem oluşturur
-                        .map(
-                          (category) => DropdownMenuItem(
-                            value: category,
-                            child: Text(
-                              category.name.toUpperCase(),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(_selectedDate == null ?'No date selected': formatter.format(_selectedDate!),),
+                          IconButton(
+                            onPressed: _presentDatePicker, 
+                            icon: const Icon(
+                              Icons.calendar_month,
                             ),
                           ),
-                        )
-                        .toList(), 
-                    // Kullanıcı dropdown’dan farklı bir seçenek seçtiğinde çalışır.
-                    onChanged: (value) {
-                      if(value == null){
-                          return;
-                      }
-                      setState(() {
-                        _selectedCategory = value; //_selectedCategory güncellenir.
-                      });
-                    },
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    DropdownButton(
+                        value: _selectedCategory, // şu an seçili olan değer
+                        // dropdown’da görüntülenecek seçeneklerin listesini tanımlar.
+                        items: Category.values // enum’daki tüm değerleri döndürür
+                            // .map(...): Her bir enum değeri için bir DropdownMenuItem oluşturur
+                            .map(
+                              (category) => DropdownMenuItem(
+                                value: category,
+                                child: Text(
+                                  category.name.toUpperCase(),
+                                ),
+                              ),
+                            )
+                            .toList(), 
+                        // Kullanıcı dropdown’dan farklı bir seçenek seçtiğinde çalışır.
+                        onChanged: (value) {
+                          if(value == null){
+                              return;
+                          }
+                          setState(() {
+                            _selectedCategory = value; //_selectedCategory güncellenir.
+                          });
+                        },
+                    ),
+                    const Spacer(),
+                    TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  // Bu butona tıklanınca konsola kullanıcıdan alınan başlık yazdırılır.
+                  ElevatedButton(
+                    onPressed: _submitExpenseData,
+                    child: Text('Save Expense'))
+                ],)
+          
+              ],
+          )
               ),
-              // Bu butona tıklanınca konsola kullanıcıdan alınan başlık yazdırılır.
-              ElevatedButton(
-                onPressed: _submitExpenseData,
-                child: Text('Save Expense'))
-            ],)
-
-          ],
-      )
-    );
+        ),
+      );
   }
 }

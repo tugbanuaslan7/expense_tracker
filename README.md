@@ -151,3 +151,229 @@ Kullanıcı hatalı bilgi girdiğinde (örneğin boş başlık, negatif tutar ve
 ![alt text](images/image-46.png)  
 ![alt text](images/image-47.png)   
 ![alt text](images/image-48.png)  
+
+## Creating a Fullscreen Modal
+![alt text](images/image-49.png)  
+![alt text](images/image-50.png)   
+![alt text](images/image-51.png)  
+
+## Using the Dismissible Widget for Dismissing List Items
+Harcamaları sağa veya sola kaydırarak silebiliyoruz.  
+![alt text](images/image-52.png)   
+![alt text](images/image-53.png)  
+![alt text](images/image-54.png)
+![alt text](images/image-55.png)  
+
+## Showing & Managing "Snackbars"
+Silinen expense'leri geri alabiliyoruz ve hiç expense eklenmemişse sayfada bir yazı olacak
+![alt text](images/image-56.png)  
+![alt text](images/image-57.png)
+![alt text](images/image-58.png)  
+
+## Getting Started with Theming
+![alt text](images/image-59.png)    
+![alt text](images/image-60.png)  
+
+## Setting & Using a Color Scheme
+![alt text](images/image-61.png)    
+![alt text](images/image-62.png)  
+
+
+## Setting Text Themes
+![alt text](images/image-63.png)    
+![alt text](images/image-64.png)
+![alt text](images/image-65.png)    
+
+## Adding Dark Mode
+telefonu dark mode'a aldığımızda hata alıyoruz    
+![alt text](images/image-66.png)    
+![alt text](images/image-67.png)    
+sorunu kart temamı açık temadan koyu temaya kopyalayarak çözeceğim   
+![alt text](images/image-68.png)    
+![alt text](images/image-69.png)    
+diğer stiller artık güzel gözükmüyor bunun nedeni de oluşturduğumuz renk şemasının belirli bir seed color kullanmasıdır
+![alt text](images/image-70.png)    
+![alt text](images/image-71.png)
+![alt text](images/image-72.png)
+
+## Using Another Kind of Loop (for-in)
+chart için expense.dart dosyasına yeni bir sınıf ekleyelim    
+belirli bir kategorideki tüm harcamaları tek bir liste altında toplayarak o kategorideki toplam tutarı hesaplacağız
+![alt text](images/image-73.png)
+
+## Adding Alternative Constructor Functions & Filtering Lists
+![alt text](images/image-74.png)
+
+## Adding Chart Widgets
+lib -> widgets klasörü içine chart klasörü oluşturdum ve içine 2 dosya ekledim:    
+chart.dart
+``` dart
+import 'package:flutter/material.dart';
+
+import 'package:expense_tracker/widgets/chart/chart_bar.dart';
+import 'package:expense_tracker/models/expense.dart';
+
+class Chart extends StatelessWidget {
+  const Chart({super.key, required this.expenses});
+
+  final List<Expense> expenses;
+
+  List<ExpenseBucket> get buckets {
+    return [
+      ExpenseBucket.forCategory(expenses, Category.food),
+      ExpenseBucket.forCategory(expenses, Category.leisure),
+      ExpenseBucket.forCategory(expenses, Category.travel),
+      ExpenseBucket.forCategory(expenses, Category.work),
+    ];
+  }
+
+  double get maxTotalExpense {
+    double maxTotalExpense = 0;
+
+    for (final bucket in buckets) {
+      if (bucket.totalExpenses > maxTotalExpense) {
+        maxTotalExpense = bucket.totalExpenses;
+      }
+    }
+
+    return maxTotalExpense;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 8,
+      ),
+      width: double.infinity,
+      height: 180,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(0.3),
+            Theme.of(context).colorScheme.primary.withOpacity(0.0)
+          ],
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+        ),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (final bucket in buckets) // alternative to map()
+                  ChartBar(
+                    fill: bucket.totalExpenses == 0
+                        ? 0
+                        : bucket.totalExpenses / maxTotalExpense,
+                  )
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: buckets
+                .map(
+                  (bucket) => Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Icon(
+                        categoryIcons[bucket.category],
+                        color: isDarkMode
+                            ? Theme.of(context).colorScheme.secondary
+                            : Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.7),
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+```  
+
+chart_bar.dart  
+```dart
+import 'package:flutter/material.dart';
+
+class ChartBar extends StatelessWidget {
+  const ChartBar({
+    super.key,
+    required this.fill,
+  });
+
+  final double fill;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: FractionallySizedBox(
+          heightFactor: fill,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(8)),
+              color: isDarkMode
+                  ? Theme.of(context).colorScheme.secondary
+                  : Theme.of(context).colorScheme.primary.withOpacity(0.65),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```
+
+![alt text](images/image-75.png)  
+![alt text](images/image-76.png)
+
+## Locking the Device Orientiation
+Bu şekilde ayarlandığında telefon yan çevrilse bile arayüz dönmüyor.
+![alt text](images/image-77.png)   
+![alt text](images/image-78.png)
+
+## Updating the UI based on the Available Space
+Ama ben cihazımın yatay modda da çalışmasını istiyorum  
+İlk olarak yatay modda bu şekilde gözüküyor  
+![alt text](images/image-79.png)   
+Liste ve grafik yan yana gelecek şekilde ayarlayalım   
+![alt text](images/image-80.png)   
+![alt text](images/image-81.png)   
+![alt text](images/image-82.png)   
+
+## Understanding Size Constraints
+
+## Handling to Screen Overlays like the Soft Keyboard
+![alt text](images/image-83.png)   
+![alt text](images/image-84.png)  
+kaydırılabilir yapalım     
+![alt text](images/image-85.png)   
+![alt text](images/image-86.png)  
+
+## Understanding "Safe Areas"
+```dart
+useSafeArea: true,
+```   
+satırını eklediğim zaman arayüzü etkileyebilecek kamera gibi özelliklerden arayüzün uzak durmasını sağlar.    
+![alt text](images/image-87.png)  
