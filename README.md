@@ -1,4 +1,50 @@
 # EXPENSE TRACKER
+Bu mobil uygulama, kullanıcıların günlük harcamalarını kolayca kaydedebilecekleri, düzenleyebilecekleri ve analiz edebilecekleri kapsamlı bir gider takip sistemidir. Kullanıcılar, her harcamaya ait başlık, miktar, kategori ve tarih bilgilerini girebilir; kayıtlı harcamalar liste görünümünde detaylı şekilde görüntülenebilir. Ayrıca harcamalar kategorilere göre gruplandırılarak grafiksel (chart) olarak da sunulur.
+
+![alt text](images/image-88.png)
+![alt text](images/image-89.png) 
+
+
+## Dosya Yapısı
+```css
+lib/
+├── models/
+│   └── expense.dart
+├── widgets/
+│   ├── chart/
+│   │   ├── chart.dart
+│   │   └── chart_bar.dart
+│   ├── expenses_list/
+│   │   ├── expenses_list.dart
+│   │   └── expense_item.dart
+│   ├── expenses.dart
+│   └── new_expense.dart
+└── main.dart
+```
+
+### 📄 main.dart
+Bu dosya uygulamanın başlangıç noktasıdır. runApp() fonksiyonu ile uygulama başlatılır ve MaterialApp widget’ı çağrılarak genel tema ayarları yapılır. Tema içinde ColorScheme, AppBar, Card, Text, ElevatedButton gibi bileşenlerin görünümü özelleştirilmiştir. Uygulamanın ana ekranı olarak Expenses adlı widget tanımlanmıştır. Bu yapı sayesinde uygulama başlatıldığında doğrudan gider listesinin bulunduğu ana ekrana yönlendirilir.
+
+### 📄 widgets/expenses.dart
+Bu dosya, kullanıcı arayüzünün ana ekranını temsil eder. İçerisinde örnek birkaç harcama (Expense) tanımlıdır ve bu harcamalar bir liste şeklinde saklanır. Kullanıcı yeni bir gider eklemek istediğinde ekranın alt kısmından kayan bir form açılır (showModalBottomSheet). Ayrıca, harcama silindiğinde geri alma (undo) işlemini sağlayan bir SnackBar kullanılır. Eğer liste boşsa bilgilendirici bir metin gösterilir; harcamalar varsa liste olarak gösterilir. Bu yapı, uygulamanın dinamik ve kullanıcı etkileşimli olmasını sağlar.
+
+### 📄 widgets/new_expense.dart
+Bu dosyada, kullanıcının yeni bir gider ekleyebileceği form yapısı yer alır. Başlık, miktar, kategori ve tarih bilgileri kullanıcıdan alınır. TextField, DropdownButton, IconButton ve DatePicker gibi bileşenlerle kullanıcıdan veri toplanır. Girişlerin doğruluğu kontrol edilir ve eksik ya da hatalı bir veri varsa kullanıcıya hata mesajı (AlertDialog) gösterilir. Geçerli bilgilerle bir Expense nesnesi oluşturularak, üst seviyedeki bileşene iletilir. Böylece listeye yeni bir harcama eklenmiş olur.
+
+### 📄 widgets/expenses_list/expenses_list.dart
+Bu dosya, harcama listesini oluşturan widget’tır. Harcamalar, kaydırılabilir bir liste (scrollable list) biçiminde ListView.builder ile gösterilir. Liste elemanları tek tek ExpenseItem widget’ı olarak oluşturulur. Her öğe Dismissible widget ile sarmalanmıştır; bu sayede kullanıcı öğeyi kaydırarak silebilir. Silme işlemi gerçekleştiğinde, ilgili fonksiyon tetiklenerek listeden öğe kaldırılır. Kullanıcı etkileşimine açık bir liste tasarımı sunar.
+
+### 📄 widgets/expenses_list/expense_item.dart
+Bu dosya, tek bir harcama bilgisini temsil eden görsel kart yapısını tanımlar. Kartın içinde harcamanın başlığı, miktarı, tarihi ve kategoriye göre bir ikon gösterilir. Görsellerin temaya uygunluğu ve okunabilirliği için stil düzenlemeleri yapılmıştır. ExpenseItem, liste içinde kullanılan küçük bir bileşen olsa da, harcama bilgilerinin net ve şık biçimde sunulmasını sağlar.
+
+### 📄 widgets/chart/chart.dart
+Bu dosya, tüm harcamaların kategorilere göre görsel olarak dağılımını gösteren genel grafik widget’ıdır. Her kategori için ilgili harcamalar ExpenseBucket sınıfı ile gruplanır. Grafik, bar çizgilerinden oluşur ve kullanıcının hangi kategoriye ne kadar harcama yaptığını kolayca görmesini sağlar. Bu dosya, verilerin görselleştirilerek analiz edilmesini sağlar.
+
+### 📄 widgets/chart/chart_bar.dart
+Bu dosya, grafikteki her bir çubuğu (bar) temsil eder. Barlar belirli bir kategoriye karşılık gelir ve yüksekliği, o kategoriye ait harcama miktarını temsil eder. Harcama oranı yüzdeye göre hesaplanır ve bar yüksekliği bu değere göre ayarlanır. Bu sayede kullanıcı, görsel olarak hangi kategoriye daha çok harcama yaptığını anlayabilir.
+
+### 📄 models/expense.dart
+Bu dosya, uygulamada kullanılan Expense model sınıfını tanımlar. Her harcama için başlık, tutar, tarih ve kategori bilgileri saklanır. Her harcamaya benzersiz bir id atanır (uuid ile). Ayrıca, tarih biçimlendirme (formattedDate) işlemleri bu sınıf içinde yapılır. Enum (Category) tanımı sayesinde kategorilere sabit değerler atanmıştır. Harcamalar bu yapı üzerinden tanımlanır ve yönetilir.
 
 ## Starting
 Başlangıç olarak, main.dart dosyasında MaterialApp ile uygulamanın başlangıç noktası tanımlandı ve Expenses adlı bir StatefulWidget ana sayfa olarak ayarlandı. Expenses sayfasında şimdilik yalnızca iki metin (The chart, Expenses list...) gösterilerek grafik ve harcama listesinin yer alacağı alanlar belirtildi. 
@@ -74,7 +120,7 @@ gibi doğrudan yazdırırsan şu tarz bir çıktı verir: "2025-07-11 15:43:12.1
 
 ## Setting an AppBar with a Title & Actions
 
-App bar ekleyelim
+App bar ekleyelim    
 ![alt text](images/image-16.png)  
 ![alt text](images/image-17.png)
 

@@ -82,6 +82,9 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(builder: (ctx, constrains) {
+      final width = constrains.maxWidth;
+
       return SizedBox(
         height: double.infinity,
         child: SingleChildScrollView(
@@ -89,13 +92,31 @@ class _NewExpenseState extends State<NewExpense> {
             padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
             child: Column(
               children: [
-                TextField(
-                  controller: _titleContoller,
-                  maxLength: 50, // Kullanıcıdan maksimum 50 karakterlik bir başlık (title) girmesi isteniyor.
-                  decoration: InputDecoration(
-                    label: Text('Title'),
+                if(width >= 600)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _titleContoller,
+                          maxLength: 50, // Kullanıcıdan maksimum 50 karakterlik bir başlık (title) girmesi isteniyor.
+                          decoration: InputDecoration(
+                            label: Text('Title'),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+
+                    ],
+                  )
+                else
+                  TextField(
+                    controller: _titleContoller,
+                    maxLength: 50, // Kullanıcıdan maksimum 50 karakterlik bir başlık (title) girmesi isteniyor.
+                    decoration: InputDecoration(
+                      label: Text('Title'),
+                    ),
                   ),
-                ),
                 Row(
                   children: [
                     Expanded(
@@ -171,5 +192,8 @@ class _NewExpenseState extends State<NewExpense> {
               ),
         ),
       );
+
+    });
+      
   }
 }
